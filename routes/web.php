@@ -1,5 +1,10 @@
 <?php
 
+use App\Order;
+use App\Enums\OrderStatus;
+use Illuminate\Http\Request;
+use BenSampo\Enum\Rules\EnumValue;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,5 +17,23 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $order = Order::find(4);
+
+    return view('welcome', [
+        'order' => $order,
+    ]);
+});
+
+Route::get('/enum', function () {
+    Order::create([
+        'status' => OrderStatus::Delivered
+    ]);
+});
+
+Route::post('/updateStatus', function (Request $request) {
+    $request->validate([
+        'status' => ['required', new EnumValue(OrderStatus::class, false)],
+    ]);
+
+    dd('worked');
 });

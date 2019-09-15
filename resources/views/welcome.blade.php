@@ -94,6 +94,29 @@
                     <a href="https://vapor.laravel.com">Vapor</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
+
+                <div>
+                    @if ($order->status === \App\Enums\OrderStatus::Delivered)
+                        It has been delivered
+                    @endif
+                    {{ \App\Enums\OrderStatus::getDescription($order->status) }}
+                </div>
+
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="/updateStatus" method="POST">
+                    @csrf
+                    <input type="text" name="status">
+                    <button type="submit">Update</button>
+                </form>
             </div>
         </div>
     </body>
